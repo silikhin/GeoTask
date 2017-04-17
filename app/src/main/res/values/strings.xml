@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Geo Task</string>
+    <string name="fragFromText">It\'s Fragment From</string>
+    <string name="fragToText">It\'s Fragment To</string>
 </resources>
