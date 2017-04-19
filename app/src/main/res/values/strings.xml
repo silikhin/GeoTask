@@ -3,7 +3,4 @@
     <string name="fragFromText">It\'s Fragment From</string>
     <string name="fragToText">It\'s Fragment To</string>
     <string name="title_activity_result_map">Result</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

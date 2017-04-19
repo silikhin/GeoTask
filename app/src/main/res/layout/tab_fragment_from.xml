@@ -5,11 +5,10 @@
     android:orientation="vertical"
     tools:context="com.silikhin.geotask.MapFragmentFrom">
 
-    <fragment
-        android:id="@+id/place_autocomplete_fragment"
+    <FrameLayout
+        android:id="@+id/place_autocomplete_from"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
         />
 
     <include layout="@layout/map_from"
