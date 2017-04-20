@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.silikhin.geotask.MapFragmentFrom">
+    tools:context="com.silikhin.geotask.MainActivity">
 
     <FrameLayout
         android:id="@+id/place_autocomplete_from"
@@ -11,8 +11,9 @@
         android:layout_height="wrap_content"
         />
 
-    <include layout="@layout/map_from"
+    <FrameLayout
+        android:id="@+id/mapFrom"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 </LinearLayout>
