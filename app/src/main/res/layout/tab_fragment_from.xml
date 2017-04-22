@@ -8,8 +8,33 @@
     <FrameLayout
         android:id="@+id/place_autocomplete_from"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvRecentlySearched"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:paddingLeft="@dimen/itemLeftRightPadding"
+            android:text="Recently searched:"
+            android:textSize="14sp"/>
+
+        <FrameLayout
+            android:id="@+id/layout_last_loc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ListView
+                android:id="@+id/lvLastLoc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+        </FrameLayout>
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/mapFrom"

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="lvLayoutHeight">277dp</dimen>
+    <dimen name="itemLeftRightPadding">16dp</dimen>
+    <dimen name="itemTopBottomPadding">8dp</dimen>
+</resources>
