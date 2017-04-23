@@ -1,5 +1,7 @@
 package com.silikhin.geotask;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -36,12 +38,16 @@ public class TabFragmentTo extends Fragment implements OnMapReadyCallback{
     private TextView tvRecentlySearched;
     private ListView lvLastLoc;
     private LastLocArrayAdapter adapter;
+    private SharedPreferences.Editor editor;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.tab_fragment_to, container, false);
+
+        editor = getActivity().getPreferences(Context.MODE_PRIVATE).edit();
+        editor.clear().commit();
 
         lastSearches = new ArrayList<>();
         tvRecentlySearched = (TextView) view.findViewById(R.id.tvRecentlySearchedTo);
@@ -91,10 +97,6 @@ public class TabFragmentTo extends Fragment implements OnMapReadyCallback{
         mUISettings.setZoomControlsEnabled(true);
     }
 
-    public LatLng getChoosenPlaceToLatLng() {
-        return choosenPlaceToLatLng;
-    }
-
     public void drawRecentSearches(){
         if (lastSearches.size()>1){
             tvRecentlySearched.setVisibility(View.VISIBLE);
@@ -126,6 +128,7 @@ public class TabFragmentTo extends Fragment implements OnMapReadyCallback{
 
             choosenPlaceToLatLng = place.getLatLng();
             String choosenPlaceTitle = place.getName().toString();
+            saveLatLngTo();
 
             mMap.addMarker(new MarkerOptions().position(choosenPlaceToLatLng).title(choosenPlaceTitle));
 
@@ -133,5 +136,11 @@ public class TabFragmentTo extends Fragment implements OnMapReadyCallback{
             CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
             mMap.animateCamera(cameraUpdate);
         }
+    }
+
+    private void saveLatLngTo(){
+        editor.putLong("latTo", Double.doubleToLongBits(choosenPlaceToLatLng.latitude));
+        editor.putLong("lngTo", Double.doubleToLongBits(choosenPlaceToLatLng.longitude));
+        editor.commit();
     }
 }

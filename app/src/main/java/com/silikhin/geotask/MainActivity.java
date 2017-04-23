@@ -1,21 +1,25 @@
 package com.silikhin.geotask;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.model.LatLng;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private GoogleApiClient mGoogleApiClient;
+    LatLng targetFrom, targetTo, targetWrong;
+    private final double wrongLat = 43.611559;
+    private final double wrongLng = 31.501455;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,18 +55,41 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mGoogleApiClient = new GoogleApiClient
-                .Builder(this)
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        Log.e("myLogs", "Connection falled "+ connectionResult);
-                    }
-                })
-                .build();
+        targetWrong = new LatLng(wrongLat, wrongLng);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        SharedPreferences sp = getPreferences(MODE_PRIVATE);
+        double latFrom = Double.longBitsToDouble(sp.getLong("latFrom", Double.doubleToLongBits(wrongLat)));
+        double lngFrom = Double.longBitsToDouble(sp.getLong("lngFrom", Double.doubleToLongBits(wrongLng)));
+        double latTo = Double.longBitsToDouble(sp.getLong("latTo", Double.doubleToLongBits(wrongLat)));
+        double lngTo = Double.longBitsToDouble(sp.getLong("lngTo", Double.doubleToLongBits(wrongLng)));
+
+        targetFrom = new LatLng(latFrom, lngFrom);
+        targetTo = new LatLng(latTo, lngTo);
+        Log.d("myLogs", "target from LatLng = " + targetFrom + ", target to LatLng = " + targetTo);
+        Log.d("myLogs", "targetWrong = " + targetWrong);
+        Bundle coordinates = new Bundle();
+        coordinates.putParcelable("latLngFrom", targetFrom);
+        coordinates.putParcelable("latLngTo", targetTo);
+        if (targetFrom==null||targetFrom.equals(targetWrong)) {
+            Toast.makeText(this, "Please, chose location from", Toast.LENGTH_SHORT).show();
+        }
+        else if (targetTo==null||targetTo.equals(targetWrong)) {
+            Toast.makeText(this, "Please, chose location to", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Intent intent = new Intent(this, ResultMapActivity.class);
+            intent.putExtra("bundle", coordinates);
+            startActivity(intent);
+        }
+        return true;
+    }
 }

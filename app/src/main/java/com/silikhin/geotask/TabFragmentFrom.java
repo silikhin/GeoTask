@@ -1,5 +1,7 @@
 package com.silikhin.geotask;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -27,18 +29,22 @@ import java.util.ArrayList;
  */
 public class TabFragmentFrom extends Fragment implements OnMapReadyCallback{
 
-    private LatLng choosenPlaceFromLatLng;
+    private LatLng chosenPlaceFromLatLng;
     private GoogleMap mMap;
     private ArrayList<Place> lastSearches;
     private TextView tvRecentlySearched;
     private ListView lvLastLoc;
     private LastLocArrayAdapter adapter;
+    private SharedPreferences.Editor editor;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.tab_fragment_from, container, false);
+
+        editor = getActivity().getPreferences(Context.MODE_PRIVATE).edit();
+        editor.clear().commit();
 
         lastSearches = new ArrayList<>();
         tvRecentlySearched = (TextView) view.findViewById(R.id.tvRecentlySearchedFrom);
@@ -69,6 +75,7 @@ public class TabFragmentFrom extends Fragment implements OnMapReadyCallback{
             @Override
             public void onPlaceSelected(Place place) {
                 placeSelected(place);
+                Log.d("myLogs", "target from LatLng = " + chosenPlaceFromLatLng);
             }
 
             @Override
@@ -88,10 +95,6 @@ public class TabFragmentFrom extends Fragment implements OnMapReadyCallback{
         mUISettings.setZoomControlsEnabled(true);
     }
 
-    public LatLng getChoosenPlaceFromLatLng() {
-        return choosenPlaceFromLatLng;
-    }
-
     public void drawRecentSearches(){
         if (lastSearches.size()>1){
             tvRecentlySearched.setVisibility(View.VISIBLE);
@@ -100,11 +103,7 @@ public class TabFragmentFrom extends Fragment implements OnMapReadyCallback{
         if (lastSearches.size()>3){
             final float scale = getContext().getResources().getDisplayMetrics().density;
             int pixels = (int) (170 * scale + 0.5f);
-            Log.d("myLogs", "int pixels = " + pixels);
-            Log.d("myLogs", "itemHeight = " + lvLastLoc.getChildAt(0).getHeight());
-            Log.d("myLogs", "set ListViewHeight to " + lvLastLoc.getChildAt(0).getHeight()*3);
             lvLastLoc.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, pixels));
-            Log.d("myLogs", "ListView height = " + lvLastLoc.getLayoutParams().height);
         }
     }
 
@@ -121,14 +120,22 @@ public class TabFragmentFrom extends Fragment implements OnMapReadyCallback{
             adapter.addAll(lastSearches);
             drawRecentSearches();
 
-            choosenPlaceFromLatLng = place.getLatLng();
-            String choosenPlaceTitle = place.getName().toString();
+            chosenPlaceFromLatLng = place.getLatLng();
+            String chosenPlaceTitle = place.getName().toString();
+            saveLatLngFrom();
 
-            mMap.addMarker(new MarkerOptions().position(choosenPlaceFromLatLng).title(choosenPlaceTitle));
+            mMap.addMarker(new MarkerOptions().position(chosenPlaceFromLatLng).title(chosenPlaceTitle));
 
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(choosenPlaceFromLatLng).zoom(13.0f).build();
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(chosenPlaceFromLatLng).zoom(13.0f).build();
             CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
             mMap.animateCamera(cameraUpdate);
         }
+    }
+
+    private void saveLatLngFrom(){
+        editor.putLong("latFrom", Double.doubleToLongBits(chosenPlaceFromLatLng.latitude));
+        Log.d("myLogs", "LocationFrom = " + chosenPlaceFromLatLng);
+        editor.putLong("lngFrom", Double.doubleToLongBits(chosenPlaceFromLatLng.longitude));
+        editor.commit();
     }
 }
