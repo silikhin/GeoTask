@@ -105,11 +105,7 @@ public class TabFragmentTo extends Fragment implements OnMapReadyCallback{
         if (lastSearches.size()>3){
             final float scale = getContext().getResources().getDisplayMetrics().density;
             int pixels = (int) (170 * scale + 0.5f);
-            Log.d("myLogs", "int pixels = " + pixels);
-            Log.d("myLogs", "itemHeight = " + lvLastLoc.getChildAt(0).getHeight());
-            Log.d("myLogs", "set ListViewHeight to " + lvLastLoc.getChildAt(0).getHeight()*3);
             lvLastLoc.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, pixels));
-            Log.d("myLogs", "ListView height = " + lvLastLoc.getLayoutParams().height);
         }
     }
 

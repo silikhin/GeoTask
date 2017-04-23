@@ -75,7 +75,6 @@ public class TabFragmentFrom extends Fragment implements OnMapReadyCallback{
             @Override
             public void onPlaceSelected(Place place) {
                 placeSelected(place);
-                Log.d("myLogs", "target from LatLng = " + chosenPlaceFromLatLng);
             }
 
             @Override
@@ -134,7 +133,6 @@ public class TabFragmentFrom extends Fragment implements OnMapReadyCallback{
 
     private void saveLatLngFrom(){
         editor.putLong("latFrom", Double.doubleToLongBits(chosenPlaceFromLatLng.latitude));
-        Log.d("myLogs", "LocationFrom = " + chosenPlaceFromLatLng);
         editor.putLong("lngFrom", Double.doubleToLongBits(chosenPlaceFromLatLng.longitude));
         editor.commit();
     }

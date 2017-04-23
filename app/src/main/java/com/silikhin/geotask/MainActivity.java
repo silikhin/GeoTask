@@ -74,8 +74,6 @@ public class MainActivity extends AppCompatActivity {
 
         targetFrom = new LatLng(latFrom, lngFrom);
         targetTo = new LatLng(latTo, lngTo);
-        Log.d("myLogs", "target from LatLng = " + targetFrom + ", target to LatLng = " + targetTo);
-        Log.d("myLogs", "targetWrong = " + targetWrong);
         Bundle coordinates = new Bundle();
         coordinates.putParcelable("latLngFrom", targetFrom);
         coordinates.putParcelable("latLngTo", targetTo);
